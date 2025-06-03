@@ -18,7 +18,7 @@ load_dotenv()
 
 # --- Flask app set up ---
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://reemdelziz.github.io"}})  # Allow frontend access
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow frontend access
 
 # --- Article list ---
 related_articles = [
@@ -161,7 +161,7 @@ def submit_fact():
 
 @app.after_request
 def apply_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "https://reemdelziz.github.io"
+    response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
     return response
