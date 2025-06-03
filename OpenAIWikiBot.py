@@ -18,15 +18,7 @@ load_dotenv()
 
 # --- Flask app set up ---
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-
-# Add after_request hook to ensure headers always get added even if flask_cors somehow misses it
-@app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET,POST,PUT,DELETE,OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
-    return response
+CORS(app, resources={r"/*": {"origins": "https://reemdelziz.github.io"}}, supports_credentials=True)
 
 # --- Article list ---
 related_articles = [
