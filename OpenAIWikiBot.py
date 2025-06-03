@@ -18,7 +18,7 @@ load_dotenv()
 
 # --- Flask app set up ---
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allow frontend access
+CORS(app)  # Allow frontend access
 
 # --- Article list ---
 related_articles = [
