@@ -18,7 +18,7 @@ load_dotenv()
 
 # --- Flask app set up ---
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://reemdelziz.github.io"}})  # Allow frontend access
+CORS(app, origins=["https://reemdelziz.github.io"], supports_credentials=True)  # Allow frontend access
 
 # --- Article list ---
 related_articles = [
@@ -97,8 +97,11 @@ retriever = db.as_retriever(search_type="similarity", k=4)
 qa = RetrievalQA.from_chain_type(llm=llm, retriever=retriever, return_source_documents=True)
 
 # --- API: Ask a question ---
-@app.route('/ask', methods=['POST'])
+@app.route('/ask', methods=['POST', 'OPTIONS'])
 def ask_question():
+    if request.method == 'OPTIONS':
+        # Handles preflight
+        return '', 204
     data = request.get_json()
     query = data.get('question', '').strip()
     if not query:
@@ -139,8 +142,11 @@ def ask_question():
     })
 
 # --- API: Submit a new fact ---
-@app.route('/submit', methods=['POST'])
+@app.route('/submit', methods=['POST', 'OPTIONS'])
 def submit_fact():
+    if request.method == 'OPTIONS':
+        # Handles preflight
+        return '', 204
     data = request.get_json()
     fact = data.get("fact", "").strip()
     source = data.get("source", "User Submission").strip()
