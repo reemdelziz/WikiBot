@@ -18,7 +18,7 @@ load_dotenv()
 
 # --- Flask app set up ---
 app = Flask(__name__)
-CORS(app, resources=["https://reemdelziz.github.io/AlLuRe/"], supports_credentials=True)  # Allow frontend access
+CORS(app, resources={r"/*": {"origins": "https://reemdelziz.github.io"}})  # Allow frontend access
 
 # --- Article list ---
 related_articles = [
@@ -158,6 +158,13 @@ def submit_fact():
     db.add_documents([new_doc])
     print(f"➕ New fact added: {fact[:60]}...")
     return jsonify({"message": "Fact added successfully"})
+
+@app.after_request
+def apply_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "https://reemdelziz.github.io"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    return response
 
 # --- Run the server ---
 if __name__ == '__main__':
